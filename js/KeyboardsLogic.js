@@ -19,13 +19,14 @@ const KeyboardsLogic = (function (
     WordLogic.addGuessLetter(char);
     const word = WordLogic.getWord();
     const guessedLetters = WordLogic.getGuessedLetters();
+    const gameOver = GameOverLogic.isGameOver().status;
 
-    UILogic.renderWord(word, guessedLetters);
+    UILogic.renderWord(word, guessedLetters, gameOver);
     UILogic.renderKeyboards({
       onClick: onClickKeyboard,
       guessedLetters: WordLogic.getGuessedLetters(),
       word: WordLogic.getWord(),
-      gameOver: GameOverLogic.isGameOver().status,
+      gameOver,
     });
   }
 

@@ -24,8 +24,6 @@ const WordLogic = (function (words, randomIndex = undefined) {
     if (postChar !== undefined && !guessedLetters.includes(postChar)) {
       guessedLetters.push(postChar);
     }
-
-    console.log("addGuessLetter", char, guessedLetters);
   }
 
   return {
@@ -33,7 +31,9 @@ const WordLogic = (function (words, randomIndex = undefined) {
     getWord: () => word,
     getGuessedLetters: () => guessedLetters,
     getIncorrectGuessedLetters: () =>
-      guessedLetters.filter((char) => !word.includes(char)),
+      guessedLetters
+        .filter((char) => !word.includes(char))
+        .filter((char) => !HEB_REVERSE_POST_CHARS[char]),
     addGuessLetter,
   };
-})(ANIMAL_HEB, 0);
+})(ANIMAL_HEB);
