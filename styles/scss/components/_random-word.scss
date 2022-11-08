@@ -1,0 +1,23 @@
+.random-word {
+  margin: 1em 0;
+  font-size: 35px;
+  display: flex;
+  gap: 10px;
+  min-height: 45px;
+
+  .random-word-char {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+
+    &:not(.space-char) {
+      border-bottom: 3px solid black;
+    }
+    &.hide-char {
+      visibility: hidden;
+    }
+    &.failed {
+      color: red;
+    }
+  }
+}

@@ -1,4 +1,21 @@
+@import "components/keyboard";
+@import "components/random-word";
+
 body{
-  background: black;
-  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  max-width: 60%;
+}
+
+@media screen and (max-width: 500px){
+  #container {
+    max-width: 300px;
+  }
 }
