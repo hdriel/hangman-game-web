@@ -30,7 +30,7 @@ const KeyboardsLogic = (function (
     const guessedLetters = WordLogic.getGuessedLetters();
     const { status: gameOver, isWin: isWinner } = GameOverLogic.isGameOver();
 
-    UILogic.renderWord(word, guessedLetters, gameOver);
+    UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters, gameOver);
     UILogic.renderKeyboards({
       onClick: onClickKeyboard,
       guessedLetters: WordLogic.getGuessedLetters(),
@@ -38,8 +38,10 @@ const KeyboardsLogic = (function (
       gameOver,
     });
 
-    const chances = GameOverLogic.getTotalChances();
-    UILogic.renderHangmanMistakePreview(chances);
+    UILogic.renderHangmanMistakePreview(
+      GameOverLogic.getTotalChances(),
+      GameOverLogic.getMaxChances()
+    );
 
     if (gameOver) {
       UILogic.renderGameOverAnnouncement(isWinner);

@@ -18,7 +18,7 @@ const Controller = (function ({
     const guessedLetters = WordLogic.getGuessedLetters();
     const word = WordLogic.getWord();
 
-    UILogic.renderWord(word, guessedLetters);
+    UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters);
     UILogic.renderKeyboards({
       onClick: KeyboardsLogic.onClickKeyboard,
       guessedLetters: guessedLetters,
@@ -26,8 +26,10 @@ const Controller = (function ({
       gameOver,
     });
 
-    const chances = GameOverLogic.getTotalChances();
-    UILogic.renderHangmanMistakePreview(chances);
+    UILogic.renderHangmanMistakePreview(
+      GameOverLogic.getTotalChances(),
+      GameOverLogic.getMaxChances()
+    );
   }
 
   return { init };

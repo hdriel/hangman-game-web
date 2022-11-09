@@ -3,9 +3,10 @@ const UILogic = (function (CHARS) {
     console.debug("init UILogic");
   }
 
-  function renderWord(word, guessedLetters = [], gameOver = false) {
+  function renderWord(word, subject, guessedLetters = [], gameOver = false) {
     const words = word.split(" ");
-    const wordDom = `      
+    const wordDom = ` 
+          <p id="subject">נושא: ${subject}</p>     
           ${words
             .map((word) => {
               return word
@@ -67,18 +68,21 @@ const UILogic = (function (CHARS) {
 
     const gameOverDom = `
       <div class="game-over">
-        <p>${isWinner ? "ניצחת" : "הפסדת"}</p>
-        <!-- <p>נסה שנית, לחץ על מקש ה Enter</p> -->
+        <p>${isWinner ? "ניצחת" : "הפסדת"}</p>        
       </div>
       `;
 
     $("#game-over-container").html(gameOverDom);
   }
 
-  function renderHangmanMistakePreview(chances) {
+  function renderHangmanMistakePreview(chances, maxChances) {
     const gameOverDom = `
       <img id="hangman-img" src="assets/hangman-${chances}-removebg-preview.png" alt="hangman-image"/>   
-      ${chances ? `<p>${"נשארו לך n נסיונות".replace("n", chances)}</p>` : ""}
+      ${
+        chances && chances !== maxChances
+          ? `<p>${"נשארו לך n נסיונות".replace("n", chances)}</p>`
+          : ""
+      }
     `;
 
     $("#hangman-mistakes").html(gameOverDom);

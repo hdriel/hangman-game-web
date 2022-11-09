@@ -2,7 +2,7 @@ function getParsedGuessedLetters() {
   return JSON.parse(localStorage.getItem("guessedLetters") || "[]");
 }
 
-const WordLogic = (function (words) {
+const WordLogic = (function (words, subject) {
   function init(refresh) {
     console.debug("init WordLogic");
 
@@ -42,6 +42,7 @@ const WordLogic = (function (words) {
   return {
     init,
     getWord: () => localStorage.getItem("word"),
+    getSubject: () => subject,
     getGuessedLetters: () => getParsedGuessedLetters(),
     getIncorrectGuessedLetters: () =>
       getParsedGuessedLetters()
@@ -49,4 +50,4 @@ const WordLogic = (function (words) {
         .filter((char) => !HEB_REVERSE_POST_CHARS[char]),
     addGuessLetter,
   };
-})(SELECTED_SUBJECT);
+})(SELECTED_SUBJECT, SUBJECT_NAME);

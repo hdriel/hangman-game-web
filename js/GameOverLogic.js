@@ -27,9 +27,11 @@ const GameOverLogic = (function ({ WordLogic, UILogic }) {
 
   function restartGame() {
     WordLogic.init(true);
-    UILogic.renderWord(WordLogic.getWord());
-    const chances = GameOverLogic.getTotalChances();
-    UILogic.renderHangmanMistakePreview(chances);
+    UILogic.renderWord(WordLogic.getWord(), WordLogic.getSubject());
+    UILogic.renderHangmanMistakePreview(
+      GameOverLogic.getTotalChances(),
+      GameOverLogic.getMaxChances()
+    );
     UILogic.renderKeyboards({
       onClick: KeyboardsLogic.onClickKeyboard,
       guessedLetters: WordLogic.getGuessedLetters(),
@@ -46,6 +48,7 @@ const GameOverLogic = (function ({ WordLogic, UILogic }) {
       const mistakes = WordLogic.getIncorrectGuessedLetters().length;
       return maxMistakes - mistakes;
     },
+    getMaxChances: () => maxMistakes,
     restartGame,
   };
 })({ WordLogic, UILogic });

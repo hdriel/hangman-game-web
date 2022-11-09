@@ -13,3 +13,8 @@ const SELECTED_SUBJECT = {
   ENG: [ANIMALS_EN],
   HEB: [ANIMALS_HEB, EMOTIONAL_HEB],
 }["HEB"][0];
+
+const SUBJECT_NAME = {
+  ENG: ["Animal"],
+  HEB: ["חיות", "רגשות"],
+}["HEB"][0];
