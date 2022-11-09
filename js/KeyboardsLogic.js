@@ -2,16 +2,25 @@ const KeyboardsLogic = (function (
   chars,
   { WordLogic, UILogic, GameOverLogic }
 ) {
-  function init() {
-    console.log("init KeyboardLogic");
+  chars = chars.map((char) => char.toUpperCase());
 
-    $("body").keypress((e) => {
+  function init() {
+    console.debug("init KeyboardLogic");
+
+    $(document).keypress((e) => {
       const char = e.originalEvent.key;
       const postChar = Object.keys(HEB_POST_CHARS).find(
         (c) => HEB_POST_CHARS[c] === char
       );
-      if (chars.includes(char) || chars.includes(postChar))
+      if (chars.includes(char) || chars.includes(postChar)) {
         onClickKeyboard(postChar || char);
+      }
+      if (
+        e.originalEvent.charCode === 13 &&
+        GameOverLogic.isGameOver().status
+      ) {
+        GameOverLogic.restartGame();
+      }
     });
   }
 
@@ -19,7 +28,7 @@ const KeyboardsLogic = (function (
     WordLogic.addGuessLetter(char);
     const word = WordLogic.getWord();
     const guessedLetters = WordLogic.getGuessedLetters();
-    const gameOver = GameOverLogic.isGameOver().status;
+    const { status: gameOver, isWin: isWinner } = GameOverLogic.isGameOver();
 
     UILogic.renderWord(word, guessedLetters, gameOver);
     UILogic.renderKeyboards({
@@ -28,10 +37,18 @@ const KeyboardsLogic = (function (
       word: WordLogic.getWord(),
       gameOver,
     });
+
+    const chances = GameOverLogic.getTotalChances();
+    UILogic.renderHangmanMistakePreview(chances);
+
+    if (gameOver) {
+      UILogic.renderGameOverAnnouncement(isWinner);
+      isWinner && UILogic.renderHappyHangmanWinnerPreview();
+    }
   }
 
   return {
     init,
     onClickKeyboard,
   };
-})(HEB_CHARS, { WordLogic, UILogic, GameOverLogic });
+})(SELECTED_CHARS, { WordLogic, UILogic, GameOverLogic });

@@ -7,7 +7,6 @@
 
   .key {
     flex: 1 1 auto;
-    padding: 15px 15px;
     background: unset;
     border: 1px solid black;
     border-radius: 4px;
@@ -17,22 +16,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 4rem;
+    padding: 1rem 3rem;
 
     &.active {
       background: #0048ac;
-      color: #FFFFFF;
+      color: #ffffff;
     }
 
     &.inactive {
       background: #969494;
-      color: #FFFFFF;
+      color: #ffffff;
     }
 
     &.disabled,
     &:disabled,
-    &[disabled]{
+    &[disabled] {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .keyboards {
+    gap: 8px;
+
+    .key {
+      font-size: 2rem;
+      padding: 0.8rem 1.2rem;
     }
   }
 }

@@ -1,20 +1,29 @@
+@import "components/game-over";
 @import "components/keyboard";
 @import "components/random-word";
 
-body{
+body {
   display: flex;
   justify-content: center;
 }
 
 #container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  max-width: 60%;
+  max-width: 80%;
+
+  .content-game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
   #container {
     max-width: 300px;
   }

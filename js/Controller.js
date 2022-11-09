@@ -4,27 +4,33 @@ const Controller = (function ({
   KeyboardsLogic,
   GameOverLogic,
 }) {
-  function init(subject) {
-    console.log("init Controller");
+  function init() {
+    console.debug("init Controller");
 
     UILogic.init();
     KeyboardsLogic.init();
-    WordLogic.init(subject);
+    GameOverLogic.init();
 
-    UILogic.renderWord(WordLogic.getWord());
+    let gameOver = GameOverLogic.isGameOver().status;
+    WordLogic.init(gameOver);
+    gameOver = GameOverLogic.isGameOver().status;
 
+    const guessedLetters = WordLogic.getGuessedLetters();
+    const word = WordLogic.getWord();
+
+    UILogic.renderWord(word, guessedLetters);
     UILogic.renderKeyboards({
       onClick: KeyboardsLogic.onClickKeyboard,
-      guessedLetters: WordLogic.getGuessedLetters(),
-      word: WordLogic.getWord(),
-      gameOver: GameOverLogic.isGameOver().status,
+      guessedLetters: guessedLetters,
+      word: word,
+      gameOver,
     });
-    // UILogic.renderWord(WordLogic.getWord(), WordLogic.getGuessedLetters());
+
+    const chances = GameOverLogic.getTotalChances();
+    UILogic.renderHangmanMistakePreview(chances);
   }
 
-  return {
-    init,
-  };
+  return { init };
 })({ WordLogic, UILogic, KeyboardsLogic, GameOverLogic });
 
-Controller.init("animals");
+Controller.init();

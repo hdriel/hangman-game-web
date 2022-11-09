@@ -1,21 +1,32 @@
-// todo: remove the randomIndex params
-const WordLogic = (function (words, randomIndex = undefined) {
-  let guessedLetters;
-  let word;
+function getParsedGuessedLetters() {
+  return JSON.parse(localStorage.getItem("guessedLetters") || "[]");
+}
 
-  function init() {
-    console.log("init WordLogic");
+const WordLogic = (function (words) {
+  function init(refresh) {
+    console.debug("init WordLogic");
 
-    word = getRandomWord(words, randomIndex);
-    guessedLetters = [];
-    console.log("random word", word);
+    const randomWord = getRandomWord(words).replace(/'-@#!%\^&*/gi, "");
+    const word = refresh
+      ? randomWord
+      : localStorage.getItem("word") || randomWord;
+
+    localStorage.setItem("word", word);
+    localStorage.setItem(
+      "guessedLetters",
+      refresh ? "[]" : JSON.stringify(getParsedGuessedLetters())
+    );
   }
 
   function getRandomWord(subject, randomIndex = undefined) {
-    return randomIndex !== undefined ? subject[randomIndex] : _.sample(subject);
+    return (
+      randomIndex !== undefined ? subject[randomIndex] : _.sample(subject)
+    ).toUpperCase();
   }
 
   function addGuessLetter(char) {
+    char = char.toUpperCase();
+    const guessedLetters = getParsedGuessedLetters();
     if (!guessedLetters.includes(char)) {
       guessedLetters.push(char);
     }
@@ -24,16 +35,18 @@ const WordLogic = (function (words, randomIndex = undefined) {
     if (postChar !== undefined && !guessedLetters.includes(postChar)) {
       guessedLetters.push(postChar);
     }
+
+    localStorage.setItem("guessedLetters", JSON.stringify(guessedLetters));
   }
 
   return {
     init,
-    getWord: () => word,
-    getGuessedLetters: () => guessedLetters,
+    getWord: () => localStorage.getItem("word"),
+    getGuessedLetters: () => getParsedGuessedLetters(),
     getIncorrectGuessedLetters: () =>
-      guessedLetters
-        .filter((char) => !word.includes(char))
+      getParsedGuessedLetters()
+        .filter((char) => !localStorage.getItem("word").includes(char))
         .filter((char) => !HEB_REVERSE_POST_CHARS[char]),
     addGuessLetter,
   };
-})(ANIMAL_HEB);
+})(SELECTED_SUBJECT);

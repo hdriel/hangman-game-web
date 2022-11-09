@@ -1,0 +1,62 @@
+.game-over {
+  font-size: 20px;
+  & > p {
+    margin: 0;
+    font-size: 4rem;
+  }
+}
+
+#hangman-img {
+  width: 30rem;
+  height: 15rem;
+}
+
+#hangman-happy-img {
+  width: 10rem;
+  height: 15rem;
+}
+
+#hangman-img + p {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+#restart-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 5rem;
+  margin: 0.2em 0 0 0.5em;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+  .game-over {
+    font-size: 10px;
+    & > p {
+      font-size: 2rem;
+    }
+  }
+
+  #hangman-img + p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  #hangman-img {
+    width: 11rem;
+    height: 7rem;
+  }
+
+  #hangman-happy-img {
+    width: 5rem;
+    height: 10rem;
+  }
+
+  #restart-btn {
+    font-size: 2rem;
+  }
+}
