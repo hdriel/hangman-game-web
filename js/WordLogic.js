@@ -41,7 +41,7 @@ const WordLogic = (function (words, subject) {
 
   return {
     init,
-    getWord: () => localStorage.getItem("word"),
+    getWord: () => localStorage.getItem("word") || "",
     getSubject: () => subject,
     getGuessedLetters: () => getParsedGuessedLetters(),
     getIncorrectGuessedLetters: () =>
