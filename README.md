@@ -47,7 +47,7 @@ Or try to play here in [Live Demo](https://hdriel.github.io/rock-paper-scissors-
 This project was planed before starting develop and made the following layout: 
 ![planning](assets/screenshots/screenshot.png)
 
-The final Result is:
+### The final Result is:
 ![planning-desktop-1](assets/screenshots/hmg1.png)
 
 <hr>
