@@ -1,0 +1,190 @@
+.game-over {
+  font-size: 20px;
+}
+.game-over > p {
+  margin: 0;
+  font-size: 4rem;
+}
+
+#hangman-img {
+  width: 30rem;
+  height: 15rem;
+}
+
+#hangman-happy-img {
+  width: 10rem;
+  height: 15rem;
+}
+
+#hangman-img + p {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+#restart-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 5rem;
+  margin: 0.2em 0 0 0.5em;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+  .game-over {
+    font-size: 10px;
+  }
+  .game-over > p {
+    font-size: 2rem;
+  }
+  #hangman-img + p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  #hangman-img {
+    width: 11rem;
+    height: 7rem;
+  }
+  #hangman-happy-img {
+    width: 5rem;
+    height: 10rem;
+  }
+  #restart-btn {
+    font-size: 2rem;
+  }
+}
+.keyboards {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.keyboards .key {
+  flex: 1 1 auto;
+  background: unset;
+  border: 1px solid black;
+  border-radius: 4px;
+  max-width: 8px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  padding: 1rem 3rem;
+}
+.keyboards .key.active {
+  background: #0048ac;
+  color: #ffffff;
+}
+.keyboards .key.inactive {
+  background: #969494;
+  color: #ffffff;
+}
+.keyboards .key.disabled, .keyboards .key:disabled, .keyboards .key[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 400px) {
+  .keyboards {
+    gap: 8px;
+  }
+  .keyboards .key {
+    font-size: 2rem;
+    padding: 0.8rem 1.2rem;
+  }
+}
+#word-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 3.5rem;
+  justify-content: center;
+  position: relative;
+}
+
+#subject {
+  font-size: 2em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+}
+
+.random-word {
+  margin: 0 0 3rem 0;
+  font-size: 7rem;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 8.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  width: fit-content;
+}
+.random-word .random-word-char {
+  width: 3rem;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+}
+.random-word .random-word-char:not(.space-char) {
+  border-bottom: 7px solid black;
+}
+.random-word .random-word-char.hide-char {
+  visibility: hidden;
+}
+.random-word .random-word-char.failed {
+  color: red;
+}
+
+@media screen and (max-width: 400px) {
+  .random-word {
+    margin: 0 0 2rem 0;
+    font-size: 4rem;
+    gap: 0.3rem;
+    min-height: 1rem;
+  }
+  .random-word .random-word-char {
+    width: 2rem;
+    height: 4rem;
+  }
+  .random-word .random-word-char:not(.space-char) {
+    border-bottom: 2px solid black;
+  }
+  #subject {
+    font-size: 1.3em;
+  }
+}
+body {
+  display: flex;
+  justify-content: center;
+}
+
+#container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  max-width: 80%;
+}
+#container .content-game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 500px) {
+  #container {
+    max-width: 300px;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */
