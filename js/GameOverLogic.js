@@ -1,6 +1,4 @@
-const GameOverLogic = (function ({ WordLogic, UILogic }) {
-  let maxMistakes = 10;
-
+const GameOverLogic = (function ({ WordLogic, UILogic, maxMistakes = MAX_MISTAKES }) {
   function init() {
     console.debug("GameOverLogic init");
   }
