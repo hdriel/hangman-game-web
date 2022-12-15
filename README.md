@@ -69,10 +69,10 @@ This project was planed before starting develop and made the following layout:
 
 ## Tech and Skills
 * Development styles with [SASS](https://sass-lang.com/) by separated into component styles <br>
-* Write scripts by control approach, each controller responsibility on one rule
+* Write scripts by **controllers** approach, each controller responsibility on one rule
   - that eventually not make easy development, but I learn from that to next time develop in more efficiently way 
   - you can check out a better project on mine: [Rock, Paper and Scissors Web Game](https://github.com/hdriel/rock-paper-scissors-web)
-* Dynamically UI, That load buttons in multiple language: `Hebrew` / `English`
-* Support @media-query for responsibility layers like Desktop, Tablet and Phones
-* Saving data on local-storage for persist data, reload page will continue from where you stopped
+* **Dynamically UI**, That load buttons in multiple language: `Hebrew` / `English`
+* using **@media queries** for Supporting responsibility layers like Desktop, Tablet and Phones
+* Saving data on **local storage** for persist data, reload page will continue from where you stopped
 * You can review my code starting from `js/controller.js` file
