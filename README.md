@@ -49,9 +49,21 @@ This project was planed before starting develop and made the following layout:
 
 The final Result is:
 ![planning-desktop-1](assets/screenshots/hmg1.png)
+
+<hr>
+
 ![planning-desktop-2](assets/screenshots/hmg2.png)
+
+<hr>
+
 ![planning-desktop-3](assets/screenshots/hmg3.png)
+
+<hr>
+
 ![planning-desktop-4](assets/screenshots/hmg4.png)
+
+<hr>
+
 ![planning-desktop-5](assets/screenshots/hmg5.png)
 
 
@@ -62,4 +74,5 @@ The final Result is:
   - you can check out a better project on mine: [Rock, Paper and Scissors Web Game](https://github.com/hdriel/rock-paper-scissors-web)
 * Dynamically UI, That load buttons in multiple language: `Hebrew` / `English`
 * Support @media-query for responsibility layers like Desktop, Tablet and Phones
+* Saving data on local-storage for persist data, reload page will continue from where you stopped
 * You can review my code starting from `js/controller.js` file
