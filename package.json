@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "deploy": "gh-pages -d .",
     "start": "lite-server",
     "sass": "sass styles/scss/styles.scss:styles/css/styles.css",
     "sass:watch": "sass --watch styles/scss/styles.scss:styles/css/styles.css"
