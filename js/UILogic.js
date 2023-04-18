@@ -1,6 +1,35 @@
 const UILogic = (function (CHARS) {
-  function init() {
+  let word;
+  function init({ word: _word }) {
+    word = _word;
     console.debug("init UILogic");
+    subscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      renderKeyboardStyleEventHandler
+    );
+  }
+
+  function destroyed() {
+    console.debug("init UILogic");
+    unsubscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      renderKeyboardStyleEventHandler
+    );
+  }
+
+  function renderKeyboardStyleEventHandler({ detail: { guessedLetters } }) {
+    CHARS.filter((char) => guessedLetters.includes(char)).forEach((char) => {
+      const isInTheWord = word.includes(char);
+      const isActive = isInTheWord;
+      const isInactive = !isInTheWord;
+      const disabled = true;
+
+      const element = $(`#${char}`);
+      element.attr("disabled", true);
+      if (isActive) element.addClass("active");
+      if (isInactive) element.addClass("inactive");
+      if (disabled) element.addClass("disabled");
+    });
   }
 
   function renderWord(word, subject, guessedLetters = [], gameOver = false) {

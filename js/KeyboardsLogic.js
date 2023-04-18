@@ -31,12 +31,12 @@ const KeyboardsLogic = (function (
     const { status: gameOver, isWin: isWinner } = GameOverLogic.isGameOver();
 
     UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters, gameOver);
-    UILogic.renderKeyboards({
-      onClick: onClickKeyboard,
-      guessedLetters: WordLogic.getGuessedLetters(),
-      word: WordLogic.getWord(),
-      gameOver,
-    });
+    // UILogic.renderKeyboards({
+    //   onClick: onClickKeyboard,
+    //   guessedLetters: WordLogic.getGuessedLetters(),
+    //   word: WordLogic.getWord(),
+    //   gameOver,
+    // });
 
     UILogic.renderHangmanMistakePreview(
       GameOverLogic.getTotalChances(),

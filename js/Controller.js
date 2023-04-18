@@ -7,13 +7,14 @@ const Controller = (function ({
   function init() {
     console.debug("init Controller");
 
-    UILogic.init();
+    WordLogic.init(false);
+    UILogic.init({ word: WordLogic.getWord() });
     KeyboardsLogic.init();
     GameOverLogic.init();
 
-    let gameOver = GameOverLogic.isGameOver().status;
-    WordLogic.init(gameOver);
-    gameOver = GameOverLogic.isGameOver().status;
+    // let gameOver = GameOverLogic.isGameOver().status;
+    // WordLogic.init(gameOver);
+    // gameOver = GameOverLogic.isGameOver().status;
 
     const guessedLetters = WordLogic.getGuessedLetters();
     const word = WordLogic.getWord();
@@ -23,7 +24,7 @@ const Controller = (function ({
       onClick: KeyboardsLogic.onClickKeyboard,
       guessedLetters: guessedLetters,
       word: word,
-      gameOver,
+      gameOver: false,
     });
 
     UILogic.renderHangmanMistakePreview(

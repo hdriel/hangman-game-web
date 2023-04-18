@@ -37,6 +37,8 @@ const WordLogic = (function (words, subject) {
     }
 
     localStorage.setItem("guessedLetters", JSON.stringify(guessedLetters));
+
+    triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, { guessedLetters });
   }
 
   return {
