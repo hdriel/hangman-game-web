@@ -19,18 +19,18 @@ const KeyboardsLogic = (function (
         e.originalEvent.charCode === 13 &&
         GameOverLogic.isGameOver().status
       ) {
-        GameOverLogic.restartGame();
+        triggerEvent(GLOBAL_EVENTS.RESTART_GAME);
       }
     });
   }
 
   function onClickKeyboard(char) {
     WordLogic.addGuessLetter(char);
-    const word = WordLogic.getWord();
-    const guessedLetters = WordLogic.getGuessedLetters();
+    // const word = WordLogic.getWord();
+    // const guessedLetters = WordLogic.getGuessedLetters();
     const { status: gameOver, isWin: isWinner } = GameOverLogic.isGameOver();
 
-    UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters, gameOver);
+    // UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters, gameOver);
     // UILogic.renderKeyboards({
     //   onClick: onClickKeyboard,
     //   guessedLetters: WordLogic.getGuessedLetters(),

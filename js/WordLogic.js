@@ -3,9 +3,19 @@ function getParsedGuessedLetters() {
 }
 
 const WordLogic = (function (words, subject) {
-  function init(refresh) {
+  function init() {
     console.debug("init WordLogic");
 
+    subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, initRandomWord);
+  }
+
+  function destroy() {
+    console.debug("init WordLogic");
+
+    unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, initRandomWord);
+  }
+
+  function initRandomWord(refresh) {
     const randomWord = getRandomWord(words).replace(/'-@#!%\^&*/gi, "");
     const word = refresh
       ? randomWord
@@ -16,12 +26,24 @@ const WordLogic = (function (words, subject) {
       "guessedLetters",
       refresh ? "[]" : JSON.stringify(getParsedGuessedLetters())
     );
+
+    triggerEvent(GLOBAL_EVENTS.WORD_GENERATED, word);
+    triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, {
+      guessedLetters: getParsedGuessedLetters(),
+      incorrectGuessedLetters: getIncorrectGuessedLetters(),
+    });
   }
 
   function getRandomWord(subject, randomIndex = undefined) {
     return (
       randomIndex !== undefined ? subject[randomIndex] : _.sample(subject)
     ).toUpperCase();
+  }
+
+  function getIncorrectGuessedLetters() {
+    return getParsedGuessedLetters()
+      .filter((char) => !localStorage.getItem("word").includes(char))
+      .filter((char) => !HEB_REVERSE_POST_CHARS[char]);
   }
 
   function addGuessLetter(char) {
@@ -37,12 +59,15 @@ const WordLogic = (function (words, subject) {
     }
 
     localStorage.setItem("guessedLetters", JSON.stringify(guessedLetters));
-
-    triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, { guessedLetters });
+    triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, {
+      guessedLetters,
+      incorrectGuessedLetters: getIncorrectGuessedLetters(),
+    });
   }
 
   return {
     init,
+    initRandomWord,
     getWord: () => localStorage.getItem("word") || "",
     getSubject: () => subject,
     getGuessedLetters: () => getParsedGuessedLetters(),

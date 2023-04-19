@@ -1,25 +1,82 @@
 const UILogic = (function (CHARS) {
   let word;
+
   function init({ word: _word }) {
-    word = _word;
     console.debug("init UILogic");
+
     subscribeEvent(
       GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
-      renderKeyboardStyleEventHandler
+      _renderKeyboardStyleEventHandler
     );
+
+    subscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      _renderWordStyleEventHandler
+    );
+
+    subscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+
+    subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _renderWordStyleEventHandler);
+    subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _disableKeyboardButtonsHandler);
+
+    subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, () => {});
   }
 
   function destroyed() {
-    console.debug("init UILogic");
+    console.debug("Destroyed UILogic");
+
     unsubscribeEvent(
       GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
-      renderKeyboardStyleEventHandler
+      _renderKeyboardStyleEventHandler
     );
+
+    unsubscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      _renderWordStyleEventHandler
+    );
+
+    unsubscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+
+    unsubscribeEvent(GLOBAL_EVENTS.GAME_OVER, _renderWordStyleEventHandler);
+    unsubscribeEvent(GLOBAL_EVENTS.GAME_OVER, _disableKeyboardButtonsHandler);
+
+    unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, () => {});
   }
 
-  function renderKeyboardStyleEventHandler({ detail: { guessedLetters } }) {
+  function _wordGeneratedEventHandler({ detail: _word }) {
+    word = _word;
+  }
+
+  function _renderWordStyleEventHandler({
+    detail: { guessedLetters, isWin, isLose },
+  }) {
+    const isGameOver = isWin || isLose;
+    word
+      ?.split("")
+      .map((char) => guessedLetters?.includes(char))
+      .forEach((isExist, index) => {
+        const element = $(`.random-word-char:nth-child(${index + 1})`);
+        if (isExist) element.text(word[index]);
+        else if (isGameOver && !element.text()) {
+          element.text(word[index]);
+          element.addClass("failed");
+        }
+      });
+  }
+
+  function _disableKeyboardButtonsHandler({ detail: { isWin, isLose } }) {
+    CHARS.forEach((char) => {
+      const element = $(`#${char}`);
+      element.attr("disabled", true);
+      element.addClass("disabled");
+    });
+  }
+
+  function _renderKeyboardStyleEventHandler({
+    detail: { guessedLetters, isWin, isLose },
+  }) {
     CHARS.filter((char) => guessedLetters.includes(char)).forEach((char) => {
-      const isInTheWord = word.includes(char);
+      const isInTheWord = word?.includes(char);
       const isActive = isInTheWord;
       const isInactive = !isInTheWord;
       const disabled = true;

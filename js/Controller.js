@@ -7,7 +7,7 @@ const Controller = (function ({
   function init() {
     console.debug("init Controller");
 
-    WordLogic.init(false);
+    WordLogic.init();
     UILogic.init({ word: WordLogic.getWord() });
     KeyboardsLogic.init();
     GameOverLogic.init();
@@ -16,6 +16,7 @@ const Controller = (function ({
     // WordLogic.init(gameOver);
     // gameOver = GameOverLogic.isGameOver().status;
 
+    WordLogic.initRandomWord(false);
     const guessedLetters = WordLogic.getGuessedLetters();
     const word = WordLogic.getWord();
 
