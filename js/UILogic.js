@@ -2,7 +2,7 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
   let word;
   let maxMistakes = 0;
 
-  function init({ word: _word }) {
+  function init() {
     console.debug("init UILogic");
 
     subscribeEvent(
