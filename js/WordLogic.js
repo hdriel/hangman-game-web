@@ -7,15 +7,17 @@ const WordLogic = (function (words, subject) {
     console.debug("init WordLogic");
 
     subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, initRandomWord);
+    subscribeEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, addGuessLetterHandler);
   }
 
   function destroy() {
     console.debug("init WordLogic");
 
     unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, initRandomWord);
+    unsubscribeEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, addGuessLetterHandler);
   }
 
-  function initRandomWord(refresh) {
+  function initRandomWord({ detail: refresh }) {
     const randomWord = getRandomWord(words).replace(/'-@#!%\^&*/gi, "");
     const word = refresh
       ? randomWord
@@ -27,7 +29,11 @@ const WordLogic = (function (words, subject) {
       refresh ? "[]" : JSON.stringify(getParsedGuessedLetters())
     );
 
-    triggerEvent(GLOBAL_EVENTS.WORD_GENERATED, word);
+    triggerEvent(GLOBAL_EVENTS.WORD_GENERATED, {
+      word,
+      guessedLetters: getParsedGuessedLetters(),
+      subject,
+    });
     triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, {
       guessedLetters: getParsedGuessedLetters(),
       incorrectGuessedLetters: getIncorrectGuessedLetters(),
@@ -44,6 +50,10 @@ const WordLogic = (function (words, subject) {
     return getParsedGuessedLetters()
       .filter((char) => !localStorage.getItem("word").includes(char))
       .filter((char) => !HEB_REVERSE_POST_CHARS[char]);
+  }
+
+  function addGuessLetterHandler({ detail: char }) {
+    addGuessLetter(char);
   }
 
   function addGuessLetter(char) {
@@ -68,13 +78,9 @@ const WordLogic = (function (words, subject) {
   return {
     init,
     initRandomWord,
-    getWord: () => localStorage.getItem("word") || "",
-    getSubject: () => subject,
-    getGuessedLetters: () => getParsedGuessedLetters(),
     getIncorrectGuessedLetters: () =>
       getParsedGuessedLetters()
         .filter((char) => !localStorage.getItem("word").includes(char))
         .filter((char) => !HEB_REVERSE_POST_CHARS[char]),
-    addGuessLetter,
   };
 })(SELECTED_SUBJECT, SUBJECT_NAME);

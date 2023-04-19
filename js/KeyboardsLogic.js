@@ -1,11 +1,10 @@
-const KeyboardsLogic = (function (
-  chars,
-  { WordLogic, UILogic, GameOverLogic }
-) {
+const KeyboardsLogic = (function (chars, { UILogic, GameOverLogic }) {
   chars = chars.map((char) => char.toUpperCase());
+  let isGameOverAlready = false;
 
   function init() {
     console.debug("init KeyboardLogic");
+    subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _updateGameOverStatusHandler);
 
     $(document).keypress((e) => {
       const char = e.originalEvent.key;
@@ -15,42 +14,27 @@ const KeyboardsLogic = (function (
       if (chars.includes(char) || chars.includes(postChar)) {
         onClickKeyboard(postChar || char);
       }
-      if (
-        e.originalEvent.charCode === 13 &&
-        GameOverLogic.isGameOver().status
-      ) {
-        triggerEvent(GLOBAL_EVENTS.RESTART_GAME);
+      if (e.originalEvent.keyCode === 13 && isGameOverAlready) {
+        triggerEvent(GLOBAL_EVENTS.RESTART_GAME, true);
       }
     });
   }
 
+  function destroy() {
+    console.debug("destroy KeyboardLogic");
+    unsubscribeEvent(GLOBAL_EVENTS.GAME_OVER, _updateGameOverStatusHandler);
+  }
+
+  function _updateGameOverStatusHandler({ detail: { isLose, isWin } }) {
+    isGameOverAlready = true;
+  }
+
   function onClickKeyboard(char) {
-    WordLogic.addGuessLetter(char);
-    // const word = WordLogic.getWord();
-    // const guessedLetters = WordLogic.getGuessedLetters();
-    const { status: gameOver, isWin: isWinner } = GameOverLogic.isGameOver();
-
-    // UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters, gameOver);
-    // UILogic.renderKeyboards({
-    //   onClick: onClickKeyboard,
-    //   guessedLetters: WordLogic.getGuessedLetters(),
-    //   word: WordLogic.getWord(),
-    //   gameOver,
-    // });
-
     UILogic.renderHangmanMistakePreview(
       GameOverLogic.getTotalChances(),
       GameOverLogic.getMaxChances()
     );
-
-    if (gameOver) {
-      UILogic.renderGameOverAnnouncement(isWinner);
-      isWinner && UILogic.renderHappyHangmanWinnerPreview();
-    }
   }
 
-  return {
-    init,
-    onClickKeyboard,
-  };
+  return { init };
 })(SELECTED_CHARS, { WordLogic, UILogic, GameOverLogic });

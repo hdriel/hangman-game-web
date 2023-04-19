@@ -15,11 +15,17 @@ const UILogic = (function (CHARS) {
     );
 
     subscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+    subscribeEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS, _resetKeyboardHandler);
 
     subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _renderWordStyleEventHandler);
     subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _disableKeyboardButtonsHandler);
+    subscribeEvent(GLOBAL_EVENTS.GAME_OVER, _renderGameOverAnnouncementHandler);
 
-    subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, () => {});
+    subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _resetKeyboardButtonsHandler);
+    subscribeEvent(
+      GLOBAL_EVENTS.RESTART_GAME,
+      _renderGameOverAnnouncementHandler
+    );
   }
 
   function destroyed() {
@@ -36,15 +42,27 @@ const UILogic = (function (CHARS) {
     );
 
     unsubscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+    unsubscribeEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS, _resetKeyboardHandler);
 
     unsubscribeEvent(GLOBAL_EVENTS.GAME_OVER, _renderWordStyleEventHandler);
     unsubscribeEvent(GLOBAL_EVENTS.GAME_OVER, _disableKeyboardButtonsHandler);
+    unsubscribeEvent(
+      GLOBAL_EVENTS.GAME_OVER,
+      _renderGameOverAnnouncementHandler
+    );
 
-    unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, () => {});
+    unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _resetKeyboardButtonsHandler);
+    unsubscribeEvent(
+      GLOBAL_EVENTS.RESTART_GAME,
+      _renderGameOverAnnouncementHandler
+    );
   }
 
-  function _wordGeneratedEventHandler({ detail: _word }) {
+  function _wordGeneratedEventHandler({
+    detail: { word: _word, subject, guessedLetters },
+  }) {
     word = _word;
+    renderWord(word, subject, guessedLetters);
   }
 
   function _renderWordStyleEventHandler({
@@ -70,6 +88,24 @@ const UILogic = (function (CHARS) {
       element.attr("disabled", true);
       element.addClass("disabled");
     });
+  }
+
+  function _resetKeyboardHandler({ detail }) {
+    renderKeyboards({ word, guessedLetters: [] });
+  }
+
+  function _resetKeyboardButtonsHandler({ detail: refresh }) {
+    if (refresh) {
+      renderKeyboards({ word, guessedLetters: [] });
+    } else {
+      CHARS.forEach((char) => {
+        const element = $(`#${char}`);
+        element.attr("disabled", false);
+        element.removeClass("disabled");
+        element.removeClass("active");
+        element.removeClass("inactive");
+      });
+    }
   }
 
   function _renderKeyboardStyleEventHandler({
@@ -117,17 +153,12 @@ const UILogic = (function (CHARS) {
     $("#word-container").html(wordDom);
   }
 
-  function renderKeyboards({
-    word,
-    onClick,
-    guessedLetters = [],
-    gameOver = false,
-  }) {
+  function renderKeyboards({ word, guessedLetters = [], gameOver = false }) {
     const wordDom = `
       <div class="keyboards">
           ${CHARS.map((char) => {
-            const isGuessed = guessedLetters.includes(char);
-            const isInTheWord = word.includes(char);
+            const isGuessed = guessedLetters?.includes(char);
+            const isInTheWord = word?.includes(char);
             const isActive = isGuessed && isInTheWord;
             const isInactive = isGuessed && !isInTheWord;
             const disabled = isGuessed || gameOver;
@@ -142,19 +173,21 @@ const UILogic = (function (CHARS) {
     $("#keyboard-container").html(wordDom);
 
     CHARS.forEach((char) => {
-      $(`#${char}`).click(() => onClick(char));
+      $(`#${char}`).click(() =>
+        triggerEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, char)
+      );
     });
   }
 
-  function renderGameOverAnnouncement(isWinner) {
-    if (isWinner === undefined) {
+  function _renderGameOverAnnouncementHandler({ detail: { isWin, isLose } }) {
+    if (!isWin && !isLose) {
       $("#game-over-container").html("");
       return;
     }
 
     const gameOverDom = `
       <div class="game-over">
-        <p>${isWinner ? "ניצחת" : "הפסדת"}</p>        
+        <p>${isWin ? "ניצחת" : "הפסדת"}</p>        
       </div>
       `;
 
@@ -181,12 +214,6 @@ const UILogic = (function (CHARS) {
 
     $("#hangman-mistakes").html(gameOverDom);
   }
-  return {
-    init,
-    renderWord,
-    renderKeyboards,
-    renderGameOverAnnouncement,
-    renderHangmanMistakePreview,
-    renderHappyHangmanWinnerPreview,
-  };
+
+  return { init, renderHangmanMistakePreview };
 })(SELECTED_CHARS);

@@ -8,25 +8,14 @@ const Controller = (function ({
     console.debug("init Controller");
 
     WordLogic.init();
-    UILogic.init({ word: WordLogic.getWord() });
+    UILogic.init({});
     KeyboardsLogic.init();
     GameOverLogic.init();
 
-    // let gameOver = GameOverLogic.isGameOver().status;
-    // WordLogic.init(gameOver);
-    // gameOver = GameOverLogic.isGameOver().status;
+    triggerEvent(GLOBAL_EVENTS.RESTART_GAME);
+    triggerEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS);
 
     WordLogic.initRandomWord(false);
-    const guessedLetters = WordLogic.getGuessedLetters();
-    const word = WordLogic.getWord();
-
-    UILogic.renderWord(word, WordLogic.getSubject(), guessedLetters);
-    UILogic.renderKeyboards({
-      onClick: KeyboardsLogic.onClickKeyboard,
-      guessedLetters: guessedLetters,
-      word: word,
-      gameOver: false,
-    });
 
     UILogic.renderHangmanMistakePreview(
       GameOverLogic.getTotalChances(),
