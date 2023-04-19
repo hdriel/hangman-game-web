@@ -12,7 +12,7 @@ const Controller = (function ({
     KeyboardsLogic.init();
     GameOverLogic.init();
 
-    triggerEvent(GLOBAL_EVENTS.RESTART_GAME);
+    triggerEvent(GLOBAL_EVENTS.RESTART_GAME, false);
     triggerEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS);
 
     WordLogic.initRandomWord(false);

@@ -61,7 +61,7 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
       _renderHangmanMistakePreviewHandler
     );
     unsubscribeEvent(
-      GLOBAL_EVENTS.RESTART_GAME,
+      GLOBAL_EVENTS.GAME_OVER,
       _renderGameOverAnnouncementHandler
     );
   }
