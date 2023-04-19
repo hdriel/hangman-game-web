@@ -34,6 +34,7 @@ const WordLogic = (function (words, subject) {
       guessedLetters: getParsedGuessedLetters(),
       subject,
     });
+
     triggerEvent(GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED, {
       guessedLetters: getParsedGuessedLetters(),
       incorrectGuessedLetters: getIncorrectGuessedLetters(),
@@ -77,10 +78,7 @@ const WordLogic = (function (words, subject) {
 
   return {
     init,
+    destroy,
     initRandomWord,
-    getIncorrectGuessedLetters: () =>
-      getParsedGuessedLetters()
-        .filter((char) => !localStorage.getItem("word").includes(char))
-        .filter((char) => !HEB_REVERSE_POST_CHARS[char]),
   };
 })(SELECTED_SUBJECT, SUBJECT_NAME);

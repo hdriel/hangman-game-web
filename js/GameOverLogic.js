@@ -1,8 +1,4 @@
-const GameOverLogic = (function ({
-  WordLogic,
-  UILogic,
-  maxMistakes = MAX_MISTAKES,
-}) {
+const GameOverLogic = (function ({ maxMistakes = MAX_MISTAKES }) {
   let word;
 
   function init() {
@@ -14,6 +10,7 @@ const GameOverLogic = (function ({
     );
 
     subscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+    subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _restartGameHandler);
   }
 
   function destroy() {
@@ -25,6 +22,7 @@ const GameOverLogic = (function ({
     );
 
     unsubscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
+    unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _restartGameHandler);
   }
 
   function _wordGeneratedEventHandler({ detail: { word: _word } }) {
@@ -46,28 +44,15 @@ const GameOverLogic = (function ({
     if (isGameOver) triggerEvent(GLOBAL_EVENTS.GAME_OVER, { isWin, isLose });
   }
 
-  // function restartGame() {
-  //   WordLogic.init(true);
-  //   UILogic.renderWord(WordLogic.getWord(), WordLogic.getSubject());
-  //   UILogic.renderHangmanMistakePreview(
-  //     GameOverLogic.getTotalChances(),
-  //     GameOverLogic.getMaxChances()
-  //   );
-  //   UILogic.renderKeyboards({
-  //     onClick: KeyboardsLogic.onClickKeyboard,
-  //     guessedLetters: WordLogic.getGuessedLetters(),
-  //     word: WordLogic.getWord(),
-  //     gameOver: GameOverLogic.isGameOver().status,
-  //   });
-  //   UILogic.renderGameOverAnnouncement();
-  // }
+  function _restartGameHandler() {
+    triggerEvent(GLOBAL_EVENTS.UPDATE_CHANCES, {
+      chances: 0,
+      maxChances: maxMistakes,
+    });
+  }
 
   return {
     init,
-    getTotalChances: () => {
-      const mistakes = WordLogic.getIncorrectGuessedLetters().length;
-      return maxMistakes - mistakes;
-    },
-    getMaxChances: () => maxMistakes,
+    destroy,
   };
-})({ WordLogic, UILogic });
+})({});

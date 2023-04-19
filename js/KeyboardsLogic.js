@@ -1,4 +1,4 @@
-const KeyboardsLogic = (function (chars, { UILogic, GameOverLogic }) {
+const KeyboardsLogic = (function ({ chars = SELECTED_CHARS }) {
   chars = chars.map((char) => char.toUpperCase());
   let isGameOverAlready = false;
 
@@ -30,11 +30,8 @@ const KeyboardsLogic = (function (chars, { UILogic, GameOverLogic }) {
   }
 
   function onClickKeyboard(char) {
-    UILogic.renderHangmanMistakePreview(
-      GameOverLogic.getTotalChances(),
-      GameOverLogic.getMaxChances()
-    );
+    triggerEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, char);
   }
 
-  return { init };
-})(SELECTED_CHARS, { WordLogic, UILogic, GameOverLogic });
+  return { init, destroy };
+})({});

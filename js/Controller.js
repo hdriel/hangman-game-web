@@ -16,14 +16,16 @@ const Controller = (function ({
     triggerEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS);
 
     WordLogic.initRandomWord(false);
-
-    UILogic.renderHangmanMistakePreview(
-      GameOverLogic.getTotalChances(),
-      GameOverLogic.getMaxChances()
-    );
   }
 
-  return { init };
+  function destroy() {
+    WordLogic.destroy();
+    UILogic.destroy();
+    KeyboardsLogic.destroy();
+    GameOverLogic.destroy();
+  }
+
+  return { init, destroy };
 })({ WordLogic, UILogic, KeyboardsLogic, GameOverLogic });
 
 Controller.init();

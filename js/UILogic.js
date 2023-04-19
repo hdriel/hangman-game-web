@@ -1,4 +1,4 @@
-const UILogic = (function (CHARS) {
+const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
   let word;
 
   function init({ word: _word }) {
@@ -24,11 +24,15 @@ const UILogic = (function (CHARS) {
     subscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _resetKeyboardButtonsHandler);
     subscribeEvent(
       GLOBAL_EVENTS.RESTART_GAME,
+      _renderHangmanMistakePreviewHandler
+    );
+    subscribeEvent(
+      GLOBAL_EVENTS.RESTART_GAME,
       _renderGameOverAnnouncementHandler
     );
   }
 
-  function destroyed() {
+  function destroy() {
     console.debug("Destroyed UILogic");
 
     unsubscribeEvent(
@@ -52,6 +56,10 @@ const UILogic = (function (CHARS) {
     );
 
     unsubscribeEvent(GLOBAL_EVENTS.RESTART_GAME, _resetKeyboardButtonsHandler);
+    unsubscribeEvent(
+      GLOBAL_EVENTS.RESTART_GAME,
+      _renderHangmanMistakePreviewHandler
+    );
     unsubscribeEvent(
       GLOBAL_EVENTS.RESTART_GAME,
       _renderGameOverAnnouncementHandler
@@ -194,7 +202,11 @@ const UILogic = (function (CHARS) {
     $("#game-over-container").html(gameOverDom);
   }
 
-  function renderHangmanMistakePreview(chances, maxChances) {
+  function _renderHangmanMistakePreviewHandler({ detail: refresh }) {
+    _renderHangmanMistakePreview(10, 10);
+  }
+
+  function _renderHangmanMistakePreview(chances, maxChances) {
     const gameOverDom = `
       <img id="hangman-img" src="assets/hangman-${chances}-removebg-preview.png" alt="hangman-image"/>   
       ${
@@ -215,5 +227,5 @@ const UILogic = (function (CHARS) {
     $("#hangman-mistakes").html(gameOverDom);
   }
 
-  return { init, renderHangmanMistakePreview };
-})(SELECTED_CHARS);
+  return { init, destroy };
+})({});
