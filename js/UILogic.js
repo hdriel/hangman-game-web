@@ -1,5 +1,6 @@
 const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
   let word;
+  let maxMistakes = 0;
 
   function init({ word: _word }) {
     console.debug("init UILogic");
@@ -12,6 +13,16 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
     subscribeEvent(
       GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
       _renderWordStyleEventHandler
+    );
+
+    subscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      _renderHangmanMistakePreviewHandler
+    );
+
+    subscribeEvent(
+      GLOBAL_EVENTS.UPDATE_MAX_MISTAKES,
+      _maxMistakeUpdatedEventHandler
     );
 
     subscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
@@ -45,6 +56,16 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
       _renderWordStyleEventHandler
     );
 
+    unsubscribeEvent(
+      GLOBAL_EVENTS.GUESSED_LETTERS_UPDATED,
+      _renderHangmanMistakePreviewHandler
+    );
+
+    unsubscribeEvent(
+      GLOBAL_EVENTS.UPDATE_MAX_MISTAKES,
+      _maxMistakeUpdatedEventHandler
+    );
+
     unsubscribeEvent(GLOBAL_EVENTS.WORD_GENERATED, _wordGeneratedEventHandler);
     unsubscribeEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS, _resetKeyboardHandler);
 
@@ -71,6 +92,10 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
   }) {
     word = _word;
     renderWord(word, subject, guessedLetters);
+  }
+
+  function _maxMistakeUpdatedEventHandler({ detail: _maxMistakes }) {
+    maxMistakes = _maxMistakes;
   }
 
   function _renderWordStyleEventHandler({
@@ -209,13 +234,22 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
       `;
 
     $("#game-over-container").html(gameOverDom);
+
+    if (isWin) renderHappyHangmanWinnerPreview();
   }
 
-  function _renderHangmanMistakePreviewHandler({ detail: refresh }) {
-    _renderHangmanMistakePreview(10, 10);
+  function _renderHangmanMistakePreviewHandler({
+    detail: { guessedLetters, incorrectGuessedLetters },
+  }) {
+    _renderHangmanMistakePreview(
+      maxMistakes - (incorrectGuessedLetters?.length ?? 0),
+      maxMistakes
+    );
   }
 
   function _renderHangmanMistakePreview(chances, maxChances) {
+    if (chances < 0) return;
+
     const gameOverDom = `
       <img id="hangman-img" src="assets/hangman-${chances}-removebg-preview.png" alt="hangman-image"/>   
       ${

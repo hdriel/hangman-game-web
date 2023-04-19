@@ -8,12 +8,16 @@ const Controller = (function ({
     console.debug("init Controller");
 
     WordLogic.init();
-    UILogic.init({});
+    UILogic.init();
     KeyboardsLogic.init();
     GameOverLogic.init();
 
     triggerEvent(GLOBAL_EVENTS.RESTART_GAME, false);
     triggerEvent(GLOBAL_EVENTS.RENDER_KEYBOARDS);
+    triggerEvent(
+      GLOBAL_EVENTS.UPDATE_MAX_MISTAKES,
+      GameOverLogic.getMaxMistakes()
+    );
 
     WordLogic.initRandomWord(false);
   }

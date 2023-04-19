@@ -12,7 +12,7 @@ const KeyboardsLogic = (function ({ chars = SELECTED_CHARS }) {
         (c) => HEB_POST_CHARS[c] === char
       );
       if (chars.includes(char) || chars.includes(postChar)) {
-        onClickKeyboard(postChar || char);
+        triggerEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, postChar || char);
       }
       if (e.originalEvent.keyCode === 13 && isGameOverAlready) {
         triggerEvent(GLOBAL_EVENTS.RESTART_GAME, true);
@@ -27,10 +27,6 @@ const KeyboardsLogic = (function ({ chars = SELECTED_CHARS }) {
 
   function _updateGameOverStatusHandler({ detail: { isLose, isWin } }) {
     isGameOverAlready = true;
-  }
-
-  function onClickKeyboard(char) {
-    triggerEvent(GLOBAL_EVENTS.KEYBOARD_PRESSED, char);
   }
 
   return { init, destroy };

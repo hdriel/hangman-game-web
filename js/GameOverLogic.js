@@ -45,14 +45,12 @@ const GameOverLogic = (function ({ maxMistakes = MAX_MISTAKES }) {
   }
 
   function _restartGameHandler() {
-    triggerEvent(GLOBAL_EVENTS.UPDATE_CHANCES, {
-      chances: 0,
-      maxChances: maxMistakes,
-    });
+    triggerEvent(GLOBAL_EVENTS.UPDATE_CHANCES, { chances: 0 });
   }
 
   return {
     init,
     destroy,
+    getMaxMistakes: () => maxMistakes,
   };
 })({});
