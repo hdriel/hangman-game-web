@@ -116,7 +116,7 @@
   margin: 0;
 }
 
-.random-word {
+.random-subword {
   margin: 0 0 3rem 0;
   font-size: 7rem;
   justify-content: center;
@@ -127,34 +127,34 @@
   flex-direction: row;
   width: fit-content;
 }
-.random-word .random-word-char {
+.random-subword .random-word-char {
   width: 3rem;
   height: 7rem;
   display: flex;
   justify-content: center;
 }
-.random-word .random-word-char:not(.space-char) {
+.random-subword .random-word-char:not(.space-char) {
   border-bottom: 7px solid black;
 }
-.random-word .random-word-char.hide-char {
+.random-subword .random-word-char.hide-char {
   visibility: hidden;
 }
-.random-word .random-word-char.failed {
+.random-subword .random-word-char.failed {
   color: red;
 }
 
 @media screen and (max-width: 400px) {
-  .random-word {
+  .random-subword {
     margin: 0 0 2rem 0;
     font-size: 4rem;
     gap: 0.3rem;
     min-height: 1rem;
   }
-  .random-word .random-word-char {
+  .random-subword .random-word-char {
     width: 2rem;
     height: 4rem;
   }
-  .random-word .random-word-char:not(.space-char) {
+  .random-subword .random-word-char:not(.space-char) {
     border-bottom: 2px solid black;
   }
   #subject {

@@ -15,7 +15,7 @@
   margin: 0;
 }
 
-.random-word {
+.random-subword {
   margin: 0 0 3rem 0;
   font-size: 7rem;
   justify-content: center;
@@ -46,7 +46,7 @@
 }
 
 @media screen and (max-width: 400px) {
-  .random-word {
+  .random-subword {
     margin: 0 0 2rem 0;
     font-size: 4rem;
     gap: 0.3rem;

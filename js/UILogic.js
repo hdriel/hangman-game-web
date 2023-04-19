@@ -77,17 +77,24 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
     detail: { guessedLetters, isWin, isLose },
   }) {
     const isGameOver = isWin || isLose;
-    word
-      ?.split("")
-      .map((char) => guessedLetters?.includes(char))
-      .forEach((isExist, index) => {
-        const element = $(`.random-word-char:nth-child(${index + 1})`);
-        if (isExist) element.text(word[index]);
-        else if (isGameOver && !element.text()) {
-          element.text(word[index]);
-          element.addClass("failed");
-        }
-      });
+    word?.split(" ").forEach((subWord, subWordIndex) => {
+      subWord
+        ?.split("")
+        .map((char) => guessedLetters?.includes(char))
+        .forEach((isExist, index) => {
+          const element = $(
+            `.random-subword:nth-child(${
+              subWordIndex + 2
+            }) .random-word-char:nth-child(${index + 1})`
+          );
+
+          if (isExist) element?.text(subWord[index]);
+          else if (isGameOver && !element.text()) {
+            element.text(subWord[index]);
+            element.addClass("failed");
+          }
+        });
+    });
   }
 
   function _disableKeyboardButtonsHandler({ detail: { isWin, isLose } }) {
@@ -153,7 +160,8 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
                 .join("");
             })
             .map(
-              (wordElement) => ` <div class="random-word">${wordElement}</div>`
+              (wordElement) =>
+                ` <div class="random-subword">${wordElement}</div>`
             )
             .join("")}   
       `;
@@ -170,6 +178,7 @@ const UILogic = (function ({ CHARS = SELECTED_CHARS }) {
             const isActive = isGuessed && isInTheWord;
             const isInactive = isGuessed && !isInTheWord;
             const disabled = isGuessed || gameOver;
+
             return `<button id="${char}" class="key ${
               isActive ? "active" : ""
             } ${isInactive ? "inactive" : ""} ${disabled ? "disabled" : ""}" ${
